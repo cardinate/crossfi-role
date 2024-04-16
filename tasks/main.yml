@@ -70,7 +70,7 @@
 - name: Configure validator moniker
   lineinfile:
     path: '{{ crossfi_home }}/config/config.toml'
-    regexp: '#?˜s*moniker ?='
+    regexp: '#?\s*moniker\s*='
     line: 'moniker = {{ crossfi_moniker }}'
 - name: Enable prometheus
   lineinfile:
