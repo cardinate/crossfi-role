@@ -1,4 +1,5 @@
 # CrossFi Validator Ansible Role
+![CrossFi Logo](/crossfi.png)
 
 This role provides an easy way to install a CrossFi validator node (supervised using cosmovisor) onto a Linux machine. 
 
