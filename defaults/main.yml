@@ -1,4 +1,4 @@
-crossfi_initial_version:  v0.2.0-prebuild6
+crossfi_initial_version:  0.2.0-prebuild6
 crossfi_archive: https://github.com/crossfichain/crossfi-node/releases/download/v{{ crossfi_initial_version }}/crossfi-node_{{ crossfi_initial_version }}_linux_amd64.tar.gz
 crossfi_user: 'crossfi'
 crossfi_home: '/var/lib/crossfi'
