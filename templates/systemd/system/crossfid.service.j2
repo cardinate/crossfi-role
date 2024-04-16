@@ -1,0 +1,22 @@
+[Unit]
+Description=CrossFi Validator
+Documentation=https://docs.crossfi.org/crossfi-chain/node-operators/join-a-network
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/var/lib/crossfi/data
+
+[Service]
+User={{ crossfi_user }}
+EnvironmentFile=/etc/default/crossfi
+ExecStart=/usr/local/bin/cosmovisor run start --home={{ crossfi_home }}
+Restart=always
+RestartSec=3
+LimitNOFILE=4096
+ProtectSystem=full
+PrivateTmp=true
+PrivateDevices=true
+ReadOnlyPaths=/
+ReadWritePaths={{ crossfi_home }}
+
+[Install]
+WantedBy=multi-user.target

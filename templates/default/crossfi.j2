@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+DAEMON_HOME={{ crossfi_home }}
+DAEMON_NAME=crossfid
+DAEMON_RESTART_AFTER_UPGRADE={{ 'true' if crossfi_cosmovisor_restart_after_update else 'false' }}
+DAEMON_ALLOW_DOWNLOAD_BINARIES={{ 'true' if crossfi_cosmovisor_allow_download_binaries else 'false' }}

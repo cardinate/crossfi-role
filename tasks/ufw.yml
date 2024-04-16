@@ -1,0 +1,8 @@
+- name: Install Cross-Fi P2P firewall profile
+  copy:
+    src: ufw/applications.d/crossfi-p2p
+    dest: /etc/ufw/applications.d/crossfi-p2p
+- name: Enable Cross-Fi P2P port in firewall
+  ufw:
+    rule: allow
+    app: CrossFi P2P

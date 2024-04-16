@@ -1,0 +1,5 @@
+- name: Enable Cross-Fi P2P port in firewall
+  ansible.posix.firewalld:
+    port: 26656/tcp
+    permanent: true
+    state: enabled

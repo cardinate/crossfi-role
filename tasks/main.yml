@@ -1,0 +1,97 @@
+- name: Create Cross-Fi user
+  user:
+    system: true
+    name: crossfi
+    home: '{{ crossfi_home }}'
+    create_home: true
+    comment: Cross-Fi service user
+- name: Get Cosmovisor binary
+  unarchive:
+    remote_src: true
+    src: '{{ crossfi_cosmovisor_archive }}'
+    dest: /usr/local/bin
+    include:
+      - cosmovisor
+  tags: ['cosmovisor']
+  notify:
+    - restart crossfid
+- name: Create cosmovisor genesis dir
+  file:
+    path: '{{ crossfi_home }}/cosmovisor/genesis/bin'
+    state: directory
+    owner: '{{ crossfi_user }}'
+  tags: ['cosmovisor']
+- name: Get Cross-Fi binary
+  unarchive:
+    remote_src: true
+    src: '{{ crossfi_archive }}'
+    dest: '{{ crossfi_home }}/cosmovisor/genesis'
+    include:
+      - bin/crossfid
+  notify:
+    - restart crossfid
+  tags: ['cosmovisor']
+- name: Create cosmovisor config file
+  template:
+    src: default/crossfi.j2
+    dest: /etc/default/crossfi
+  tags: ['cosmovisor']
+- name: Create necessary directories
+  file:
+    path: '{{ crossfi_home }}/{{ item }}'
+    owner: '{{ crossfi_user }}'
+    group: '{{ crossfi_user }}'
+    state: directory
+  with_items:
+    - data
+    - config
+- name: Check if config exists
+  stat:
+    path: '{{ crossfi_home }}/config/app.toml'
+  register:
+    crossfi_config
+- block:
+    - name: Checkout config template
+      git:
+        repo: https://github.com/crossfichain/testnet
+        dest: '{{ crossfi_home }}/.config_template'
+        depth: 1
+    - name: Copy initial configuration
+      copy:
+        remote_src: true
+        src: '{{ crossfi_home }}/.config_template/{{ item }}/'
+        dest: '{{ crossfi_home }}/{{ item }}/'
+        owner: '{{ crossfi_user }}'
+        group: '{{ crossfi_user }}'
+      with_items:
+        - data
+        - config
+  when: not crossfi_config.stat.exists
+- name: Configure validator moniker
+  lineinfile:
+    path: '{{ crossfi_home }}/config/config.toml'
+    regexp: '#?˜s*moniker ?='
+    line: 'moniker = {{ crossfi_moniker }}'
+- name: Enable prometheus
+  lineinfile:
+    path: '{{ crossfi_home }}/config/app.toml'
+    line: "  prometheus-retention-time = {{ crossfi_prometheus_retention_time }}"
+    regexp: '#?\s*prometheus-retention-time ='
+    insertafter: '^[[]telemetry[]]'
+- name: Install service unit
+  template:
+    src: systemd/system/crossfid.service.j2
+    dest: /etc/systemd/system/crossfid.service
+  notify:
+    - reload systemd
+- name: Enable and start service
+  systemd:
+    name: crossfid.service
+    state: started
+    enabled: true
+- name: Enable UFW based firewall rules
+  import_tasks: ufw.yml
+  when: 'crossfi_firewall_rules_enable is defined and crossfi_firewall_rules_enable == "ufw"'
+- name: Enable firewalld based firewall rules
+  import_tasks: firewalld.yml
+  when: 'crossfi_firewall_rules_enable is defined and crossfi_firewall_rules_enable == "firewalld"'

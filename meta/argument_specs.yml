@@ -1,0 +1,49 @@
+argument_specs:
+  main:
+    short_description: Deploy a CrossFi validator node
+    options:
+      crossfi_initial_version:
+        type: "str"
+        required: false
+        description: "The version of crossfid that will be used when cosmovisor first starts"
+        default: "0.2.0-prebuild6"
+      crossfi_user:
+        type: "str"
+        required: false
+        description: "Username for the user running crossfid"
+        default: "crossfi"
+      crossfi_home:
+        type: "str"
+        required: false
+        description: "Home directory where CrossFi configuration and data is stored"
+        default: "/var/lib/crossfi"
+      crossfi_cosmovisor_version:
+        type: "str"
+        required: false
+        description: "Version of cosmovisor to use"
+        default: "v1.5.0"
+      crossfi_cosmovisor_allow_download_binaries:
+        type: "bool"
+        required: false
+        description: "Whether cosmovisor will automatically download new binaries"
+        default: true
+      crossfi_cosmovisor_restart_after_update:
+        type: "bool"
+        required: false
+        description: "Whether cosmovisor should restart crossfid after downloading an update"
+        default: true
+      crossfi_prometheus_retention_time:
+        type: "int"
+        required: false
+        description: "If greater than 0, the prometheus exporter is enabled with this many seconds of retention"
+        default: 120
+      crossfi_moniker:
+        type: "str"
+        required: false
+        description: "The moniker used for the validator"
+        default: "The inventory hostname"
+      crossfi_firewall_rules_enable:
+        type: "str"
+        choices: ["ufw", "firewalld"]
+        required: false
+        description: "This allows you to select a firewall management implementation that will be used to open the peer-to-peer port in the firewall."

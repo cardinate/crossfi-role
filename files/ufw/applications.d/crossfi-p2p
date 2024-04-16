@@ -1,0 +1,4 @@
+[CrossFi P2P]
+title=CrossFi P2P
+description=peer-to-peer traffic for crossfi validators
+ports=26656/tcp

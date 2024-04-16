@@ -1,0 +1,9 @@
+- name: reload systemd
+  systemd:
+    daemon_reload: true
+  notify:
+    - restart crossfid
+- name: restart crossfid
+  systemd:
+    name: crossfid.service
+    state: restarted

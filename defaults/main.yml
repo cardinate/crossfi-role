@@ -1,0 +1,11 @@
+crossfi_initial_version:  v0.2.0-prebuild6
+crossfi_archive: https://github.com/crossfichain/crossfi-node/releases/download/v{{ crossfi_initial_version }}/crossfi-node_{{ crossfi_initial_version }}_linux_amd64.tar.gz
+crossfi_user: 'crossfi'
+crossfi_home: '/var/lib/crossfi'
+crossfi_cosmovisor_restart_after_update: true
+crossfi_cosmovisor_allow_download_binaries: true
+crossfi_cosmovisor_version: v1.5.0
+crossfi_cosmovisor_archive: https://github.com/cosmos/cosmos-sdk/releases/download/cosmovisor%2F{{ crossfi_cosmovisor_version }}/cosmovisor-{{ crossfi_cosmovisor_version }}-linux-amd64.tar.gz
+crossfi_prometheus_retention_time: 120
+crossfi_moniker: '{{ inventory_hostname }}'
+
